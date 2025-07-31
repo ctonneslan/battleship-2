@@ -1,8 +1,8 @@
 import Game from "./game";
 
-export default function DOMController() {
-  const game = Game();
+let game = Game();
 
+export default function DOMController() {
   const playerBoardEl = document.getElementById("player-board");
   const computerBoardEl = document.getElementById("computer-board");
   const statusEl = document.getElementById("status");
@@ -22,6 +22,23 @@ export default function DOMController() {
       isHorizontal ? "Horizontal" : "Vertical"
     })`;
   });
+
+  const restartBtn = document.getElementById("restart");
+  restartBtn.addEventListener("click", restartGame);
+
+  function restartGame() {
+    game = Game();
+    shipsToPlace = [5, 4, 3, 3, 2];
+    isPlacing = true;
+    isHorizontal = true;
+    statusEl.textContent = "Place your ships!";
+    statusEl.className = "";
+
+    playerBoardEl.innerHTML = "";
+    computerBoardEl.innerHTML = "";
+
+    renderBoards();
+  }
 
   function renderBoards() {
     renderBoard(game.human.board.board, playerBoardEl, false);

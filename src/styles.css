@@ -122,3 +122,12 @@ button:hover {
 .status-invalid {
   color: #ff4d4f;
 }
+
+#restart {
+  margin-left: 1rem;
+  background-color: #6e7681;
+}
+
+#restart:hover {
+  background-color: #8b949e;
+}
