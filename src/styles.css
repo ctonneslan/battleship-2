@@ -12,9 +12,12 @@ h1 {
 }
 
 #status {
-  margin: 1rem 0;
-  font-size: 1.2rem;
-  color: #8b949e;
+  min-height: 1.5em; /* 🔒 reserve space */
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #c9d1d9;
+  transition: opacity 0.25s ease, color 0.25s ease;
+  opacity: 1;
 }
 
 .boards {
@@ -84,4 +87,38 @@ button {
 
 button:hover {
   background-color: #2ea043;
+}
+
+@keyframes pulse-valid {
+  0% {
+    color: #238636;
+    opacity: 0.3;
+  }
+  100% {
+    color: #238636;
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-invalid {
+  0% {
+    color: #ff4d4f;
+    opacity: 0.3;
+  }
+  100% {
+    color: #ff4d4f;
+    opacity: 1;
+  }
+}
+
+.status-hidden {
+  opacity: 0;
+}
+
+.status-valid {
+  color: #2ea043;
+}
+
+.status-invalid {
+  color: #ff4d4f;
 }

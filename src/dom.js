@@ -7,6 +7,10 @@ export default function DOMController() {
   const computerBoardEl = document.getElementById("computer-board");
   const statusEl = document.getElementById("status");
 
+  statusEl.addEventListener("animationed", () => {
+    statusEl.classList.remove("status-valid", "status-invalid");
+  });
+
   let isPlacing = true;
   let shipsToPlace = [5, 4, 3, 3, 2];
   let isHorizontal = true;
@@ -84,16 +88,16 @@ export default function DOMController() {
 
     if (placed) {
       shipsToPlace.shift();
-      statusEl.textContent = "";
+      updateStatus("Ship placed!", "status-valid");
       renderBoards();
 
       if (shipsToPlace.length === 0) {
         isPlacing = false;
-        statusEl.textContent = "Start attacking the enemy!";
+        updateStatus("Start attacking the enemy!", "status-valid");
         setupComputerBoard();
       }
     } else {
-      statusEl.textContent = "Invalid placement. Try again.";
+      updateStatus("Invalid placement. Try again.", "status-invalid");
     }
   }
 
@@ -150,6 +154,17 @@ export default function DOMController() {
     document.querySelectorAll(".cell.preview").forEach((cell) => {
       cell.classList.remove("preview", "invalid");
     });
+  }
+
+  function updateStatus(message, type) {
+    statusEl.classList.add("status-hidden");
+
+    setTimeout(() => {
+      statusEl.textContent = message;
+      statusEl.className = "";
+      statusEl.classList.add(type);
+      statusEl.classList.remove("status-hidden");
+    }, 150);
   }
 
   function start() {
