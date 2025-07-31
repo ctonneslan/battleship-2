@@ -1,48 +1,87 @@
 body {
-  font-family: sans-serif;
-  background: #111;
-  color: #eee;
+  font-family: 'Inter', sans-serif;
+  background: #0d1117;
+  color: #c9d1d9;
   text-align: center;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#status {
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  color: #8b949e;
 }
 
 .boards {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 20px;
+  gap: 4rem;
+  margin-top: 2rem;
 }
 
 .board {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(10, 30px);
-  gap: 2px;
+  grid-template-columns: repeat(10, 40px);
+  grid-template-rows: repeat(10, 40px);
+  gap: 3px;
+  border: 1px solid #30363d;
+  background-color: #161b22;
+  padding: 5px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.03);
 }
 
 .cell {
-  width: 30px;
-  height: 30px;
-  background: #333;
-  border: 1px solid #555;
+  width: 40px;
+  height: 40px;
+  background: #21262d;
+  border: 1px solid #30363d;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 3px;
+}
+
+.cell:hover {
+  filter: brightness(1.1);
 }
 
 .cell.ship {
-  background: #444;
+  background-color: #3c8dbc;
 }
 
 .cell.hit {
-  background: red;
+  background-color: #ff4d4f;
 }
 
 .cell.miss {
-  background: #222;
+  background-color: #5c6370;
 }
 
 .cell.preview {
-  background-color: rgba(0, 200, 255, 0.5);
+  background-color: rgba(0, 200, 255, 0.35);
 }
 
 .cell.preview.invalid {
-  background-color: rgba(255, 50, 50, 0.5);
+  background-color: rgba(255, 50, 50, 0.35);
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background-color: #238636;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background-color: #2ea043;
 }
