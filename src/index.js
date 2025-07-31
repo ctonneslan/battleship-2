@@ -1,5 +1,7 @@
 import "./styles.css";
 import DOMController from "./dom";
 
-const ui = DOMController();
-ui.start();
+document.addEventListener("DOMContentLoaded", () => {
+  const ui = DOMController();
+  ui.start();
+});

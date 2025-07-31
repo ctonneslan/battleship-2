@@ -34,8 +34,16 @@ export default function Gameboard() {
   }
 
   function receiveAttack(x, y) {
-    if (x < 0 || x > 9 || y < 0 || y > 9) {
-      console.warn(`Invalid attack out of bounds : (${x}, ${y})`);
+    if (
+      typeof x !== "number" ||
+      typeof y !== "number" ||
+      x < 0 ||
+      x > 9 ||
+      y < 0 ||
+      y > 9 ||
+      !Array.isArray(board[x])
+    ) {
+      console.warn(`Invalid attack coords : (${x}, ${y})`);
       return "invalid";
     }
     const cell = board[x][y];

@@ -7,8 +7,31 @@ export default function DOMController() {
   const computerBoardEl = document.getElementById("computer-board");
   const statusEl = document.getElementById("status");
 
-  statusEl.addEventListener("animationed", () => {
+  statusEl.addEventListener("animationend", () => {
     statusEl.classList.remove("status-valid", "status-invalid");
+  });
+
+  const modalOverlay = document.getElementById("modal-overlay");
+  const modalMessage = document.getElementById("modal-message");
+  const modalRestartBtn = document.getElementById("modal-restart");
+
+  function restartGame() {
+    game = Game();
+    shipsToPlace = [5, 4, 3, 3, 2];
+    isPlacing = true;
+    isHorizontal = true;
+    statusEl.textContent = "Place your ships!";
+    statusEl.className = "";
+
+    playerBoardEl.innerHTML = "";
+    computerBoardEl.innerHTML = "";
+
+    renderBoards();
+  }
+
+  modalRestartBtn.addEventListener("click", () => {
+    modalOverlay.classList.add("hidden");
+    restartGame();
   });
 
   let isPlacing = true;
@@ -25,20 +48,6 @@ export default function DOMController() {
 
   const restartBtn = document.getElementById("restart");
   restartBtn.addEventListener("click", restartGame);
-
-  function restartGame() {
-    game = Game();
-    shipsToPlace = [5, 4, 3, 3, 2];
-    isPlacing = true;
-    isHorizontal = true;
-    statusEl.textContent = "Place your ships!";
-    statusEl.className = "";
-
-    playerBoardEl.innerHTML = "";
-    computerBoardEl.innerHTML = "";
-
-    renderBoards();
-  }
 
   function renderBoards() {
     renderBoard(game.human.board.board, playerBoardEl, false);
@@ -76,26 +85,33 @@ export default function DOMController() {
   }
 
   function handlePlayerAttack(e) {
-    const x = parseInt(e.target.dataset.x);
-    const y = parseInt(e.target.dataset.y);
-    const result = game.playRound(x, y);
+    if (!isPlacing && !game.isGameOver()) {
+      const x = parseInt(e.target.dataset.x);
+      const y = parseInt(e.target.dataset.y);
+      const result = game.playRound(x, y);
+      renderBoards();
 
-    if (typeof result === "string") {
-      statusEl.textContent = result;
-      disableBoard();
-    }
+      if (game.isGameOver()) {
+        const message = game.computer.board.allShipsSunk()
+          ? "🎉 You Win!"
+          : "💀 You Lose";
+        showModal(message);
+        return;
+      }
 
-    renderBoards();
+      if (!game.isGameOver() && game.computer.isComputer) {
+        setTimeout(() => {
+          game.playRound();
+          renderBoards();
 
-    if (!game.isGameOver() && game.computer.isComputer) {
-      setTimeout(() => {
-        game.playRound();
-        renderBoards();
-
-        if (game.isGameOver()) {
-          statusEl.textContent = "Computer wins!";
-        }
-      }, 500);
+          if (game.isGameOver()) {
+            const message = game.human.board.allShipsSunk()
+              ? "💀 You Lose"
+              : "🎉 You Win!";
+            showModal(message);
+          }
+        }, 500);
+      }
     }
   }
 
@@ -182,6 +198,11 @@ export default function DOMController() {
       statusEl.classList.add(type);
       statusEl.classList.remove("status-hidden");
     }, 150);
+  }
+
+  function showModal(message) {
+    modalMessage.textContent = message;
+    modalOverlay.classList.remove("hidden");
   }
 
   function start() {
