@@ -84,6 +84,7 @@ export default function DOMController() {
 
     if (placed) {
       shipsToPlace.shift();
+      statusEl.textContent = "";
       renderBoards();
 
       if (shipsToPlace.length === 0) {
@@ -136,6 +137,8 @@ export default function DOMController() {
     }
 
     const valid = game.human.board.canPlaceShipOnly(x, y, length, isHorizontal);
+
+    if (valid) statusEl.textContent = "";
 
     cells.forEach((cell) => {
       cell.classList.add("preview");
