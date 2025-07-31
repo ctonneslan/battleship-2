@@ -9,7 +9,7 @@ export default function Gameboard() {
   const missedAttacks = [];
 
   function placeShip(x, y, length, isHorizontal = true) {
-    if (!canPlaceShip(x, y, length, isHorizontal)) return false;
+    if (!canPlaceShipOnly(x, y, length, isHorizontal)) return false;
 
     const ship = Ship(length);
     ships.push({ ship, x, y, isHorizontal });
@@ -23,7 +23,7 @@ export default function Gameboard() {
     return true;
   }
 
-  function canPlaceShip(x, y, length, isHorizontal) {
+  function canPlaceShipOnly(x, y, length, isHorizontal) {
     for (let i = 0; i < length; i++) {
       const row = x + (isHorizontal ? 0 : i);
       const col = y + (isHorizontal ? i : 0);
@@ -57,5 +57,6 @@ export default function Gameboard() {
     receiveAttack,
     allShipsSunk,
     missedAttacks,
+    canPlaceShipOnly,
   };
 }

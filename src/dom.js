@@ -45,6 +45,8 @@ export default function DOMController() {
 
         if (!isComputer && isPlacing) {
           cell.addEventListener("click", () => handleShipPlacement(x, y));
+          cell.addEventListener("mouseenter", () => showPreview(x, y));
+          cell.addEventListener("mouseleave", clearPreview);
         }
 
         container.appendChild(cell);
@@ -115,6 +117,35 @@ export default function DOMController() {
     cells.forEach((cell) => {
       const newCell = cell.cloneNode(true);
       cell.parentNode.replaceChild(newCell, cell);
+    });
+  }
+
+  function showPreview(x, y) {
+    const length = shipsToPlace[0];
+    const cells = [];
+
+    for (let i = 0; i < length; i++) {
+      const row = x + (isHorizontal ? 0 : i);
+      const col = y + (isHorizontal ? i : 0);
+
+      const cell = document.querySelector(
+        `#player-board .cell[data-x="${row}"][data-y="${col}"]`
+      );
+
+      if (cell) cells.push(cell);
+    }
+
+    const valid = game.human.board.canPlaceShipOnly(x, y, length, isHorizontal);
+
+    cells.forEach((cell) => {
+      cell.classList.add("preview");
+      if (!valid) cell.classList.add("invalid");
+    });
+  }
+
+  function clearPreview() {
+    document.querySelectorAll(".cell.preview").forEach((cell) => {
+      cell.classList.remove("preview", "invalid");
     });
   }
 
