@@ -16,7 +16,7 @@ export default function Game() {
     if (isGameOver) return;
 
     const result = currentPlayer.isComputer
-      ? currentPlayer.randomAttack(opponent.board)
+      ? currentPlayer.smartAttack(opponent.board)
       : currentPlayer.attack(opponent.board, x, y);
 
     if (opponent.board.allShipsSunk()) {
