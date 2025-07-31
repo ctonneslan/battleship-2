@@ -7,6 +7,18 @@ export default function DOMController() {
   const computerBoardEl = document.getElementById("computer-board");
   const statusEl = document.getElementById("status");
 
+  let isPlacing = true;
+  let shipsToPlace = [5, 4, 3, 3, 2];
+  let isHorizontal = true;
+
+  const rotateBtn = document.getElementById("rotate");
+  rotateBtn.addEventListener("click", () => {
+    isHorizontal = !isHorizontal;
+    rotateBtn.textContent = `Rotate (Current: ${
+      isHorizontal ? "Horizontal" : "Vertical"
+    })`;
+  });
+
   function renderBoards() {
     renderBoard(game.human.board.board, playerBoardEl, false);
     renderBoard(game.computer.board.board, computerBoardEl, true);
@@ -29,6 +41,10 @@ export default function DOMController() {
 
         if (isComputer && value !== "hit" && value !== "miss") {
           cell.addEventListener("click", handlePlayerAttack);
+        }
+
+        if (!isComputer && isPlacing) {
+          cell.addEventListener("click", () => handleShipPlacement(x, y));
         }
 
         container.appendChild(cell);
@@ -60,6 +76,40 @@ export default function DOMController() {
     }
   }
 
+  function handleShipPlacement(x, y) {
+    const length = shipsToPlace[0];
+    const placed = game.human.board.placeShip(x, y, length, isHorizontal);
+
+    if (placed) {
+      shipsToPlace.shift();
+      renderBoards();
+
+      if (shipsToPlace.length === 0) {
+        isPlacing = false;
+        statusEl.textContent = "Start attacking the enemy!";
+        setupComputerBoard();
+      }
+    } else {
+      statusEl.textContent = "Invalid placement. Try again.";
+    }
+  }
+
+  function setupComputerBoard() {
+    const lengths = [5, 4, 3, 3, 2];
+
+    lengths.forEach((len) => {
+      let placed = false;
+      while (!placed) {
+        const x = Math.floor(Math.random() * 10);
+        const y = Math.floor(Math.random() * 10);
+        const dir = Math.random() > 0.5;
+        placed = game.computer.board.placeShip(x, y, len, dir);
+      }
+    });
+
+    renderBoards();
+  }
+
   function disableBoard() {
     const cells = computerBoardEl.querySelectorAll(".cell");
     cells.forEach((cell) => {
@@ -69,11 +119,7 @@ export default function DOMController() {
   }
 
   function start() {
-    game.human.board.placeShip(0, 0, 3);
-    game.human.board.placeShip(2, 2, 2, false);
-    game.computer.board.placeShip(0, 0, 3);
-    game.computer.board.placeShip(2, 2, 2, false);
-
+    statusEl.textContent = "Place your ships!";
     renderBoards();
   }
 
